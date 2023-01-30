@@ -48,7 +48,7 @@ const UserProfile = () => {
     )
 
     if (user === undefined) {
-        return <ErrorPage />
+
     }
     else if (user) {
         const userData: UserData = {
