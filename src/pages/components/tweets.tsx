@@ -22,10 +22,11 @@ const Tweets = (tweetData: TweetData) => {
             <p className="font-normal text-white text-sm">{tweetData.tweet}</p>
             <div className="flex flex-row justify-end gap-3 pt-2">
                 <button onClick={() => {
-                    if (hasLiked)
-                        unlikeMutation({ tweetId: tweetData.tweetId })
+                    if (hasLiked) {
+                        unlikeMutation({ tweetId: tweetData.tweetId }).catch((e) => console.log(e))
+                    }
                     else {
-                        likeMutation({ tweetId: tweetData.tweetId })
+                        likeMutation({ tweetId: tweetData.tweetId }).catch((e) => console.log(e))
                     }
                 }} className="inline-flex items-center text-center text-white font-semibold">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" className={hasLiked ? "w-6 h-6 stroke-sky-700" : "w-6 h-6 stroke-white"}>
