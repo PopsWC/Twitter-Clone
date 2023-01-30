@@ -16,7 +16,7 @@ type Inputs = {
 
 
 export const CreateTweet = () => {
-    const addPost = api.newTweetRouter.createTweet.useMutation({
+    const addPost = api.tweetRouter.createTweet.useMutation({
         onSuccess() {
             console.log("Success")
         },
