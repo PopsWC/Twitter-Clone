@@ -13,8 +13,8 @@ const Tweets = (tweetData: TweetData) => {
     const tweetRouter = api.tweetRouter;
     const likeMutation = tweetRouter.like.useMutation().mutateAsync;
     const unlikeMutation = tweetRouter.unlike.useMutation().mutateAsync;
-    const hasLiked = tweetRouter.getTweetById.useQuery({ tweetId: tweetData.tweetId }).data!.likes.length > 0
-    const numLikes = tweetRouter.getTweetById.useQuery({ tweetId: tweetData.tweetId }).data!.likes.length
+    const hasLiked = tweetRouter.getTweetById.useQuery({ tweetId: tweetData.tweetId }).data!.likes!.length > 0 // eslint-disable-line
+    const numLikes = tweetRouter.getTweetById.useQuery({ tweetId: tweetData.tweetId }).data?.likes.length // eslint-disable-line
 
     return (
         <a href="#" className="block max-w-sm p-6 min-w-full bg-white border-b border-gray-200 rounded-md shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
