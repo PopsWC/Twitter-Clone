@@ -9,10 +9,6 @@ type TweetData = {
     createdAt: string
 }
 
-function updateCache({client,variables,data,action}: {client: QueryClient, variables: {tweetId: string},data: {userId: string}, action: "like" | "unlike"}){
-
-}
-
 const Tweets = (tweetData: TweetData) => {
     const tweetRouter = api.tweetRouter;
     const likeMutation = tweetRouter.like.useMutation().mutateAsync;
