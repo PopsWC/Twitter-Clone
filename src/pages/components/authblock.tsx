@@ -63,8 +63,8 @@ export function AuthBlock() {
     return(
     <div className="flex flex-col w-full max-w-sm h-full border border-gray-700 rounded-lg shadow-md bg-gray-800">
         <div className="flex flex-row min-w-full items-center ml-3 mt-3">
-            <div className="flex flex-col w-auto p-3 justify-items-center items-center">
-                <Link href="/api/auth/signin/discord" className="text-white">Sign in</Link>
+            <div className="flex flex-col w-auto p-3 justify-center items-center">
+                <Link href="/api/auth/signin/discord" className="text-blue-700">Sign in</Link>
             </div>
         </div>
     </div>
