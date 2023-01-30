@@ -4,7 +4,7 @@ import { api } from "../../utils/api";
 
 export const TrendingBlock = () => {
 
-    const postsQuery = api.tweetRouter.list.useInfiniteQuery(
+    const tweetQuery = api.tweetRouter.list.useInfiniteQuery(
         {
             limit: 5,
         },
@@ -20,7 +20,7 @@ export const TrendingBlock = () => {
             <h2 className="text-white font-semibold text-xl mt-5 mb-3">Trending</h2>
             <div className="flex flex-col w-full border border-gray-700 rounded-lg shadow-md bg-gray-800 overflow-scroll">
                 <div className="flex flex-col w-full h-auto rounded-lg">
-                    {postsQuery.data?.pages.map((page, index) => (
+                    {tweetQuery.data?.pages.map((page, index) => (
                         <div key={page.items[0]?.id || index}>
                             {page.items.map((item) => (
                                 // eslint-disable-next-line react/jsx-key

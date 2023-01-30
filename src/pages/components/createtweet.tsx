@@ -16,35 +16,17 @@ type Inputs = {
 
 
 export const CreateTweet = () => {
-    const { data: session, status } = useSession()
-
-    const addPost = api.tweetRouter.add.useMutation({
+    const addPost = api.newTweetRouter.createTweet.useMutation({
         onSuccess() {
             console.log("Success")
         },
     });
 
     const { register, handleSubmit, reset } = useForm<Inputs>();
-    const onSubmit: SubmitHandler<Inputs> = data => {
-        const tweetText = { data }
-        if (status == "authenticated" && tweetText.data.tweet != null && session.user?.name != null && session.user?.id != null) {
-            const tweetData : TweetData = {
-                tweet: tweetText.data.tweet,
-                userName: session.user.name,
-                userId: session.user.id,
-                createdAt: new Date().toISOString()
-            }
-            try {
-                addPost.mutateAsync(tweetData).catch((err) => console.log(err))
+    const onSubmit: SubmitHandler<Inputs> = async data => {
+                await addPost.mutateAsync(data).catch((err) => console.log(err))
                 reset({ tweet: "" })
-            } catch (error) {
-                console.log("Error")
             }
-        }
-        else {
-            console.log("Error")
-        }
-    }
 
 
     return (

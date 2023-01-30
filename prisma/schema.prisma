@@ -78,13 +78,12 @@ model Tweets {
 }
 
 model Likes {
-    id        String   @id @default(uuid())
     tweet     Tweets   @relation(fields: [tweetId], references: [id])
     tweetId   String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
-    liked     Boolean
     updatedAt DateTime @default(now()) @updatedAt
+    @@unique([userId, tweetId])
 }
 
 model Shares {
@@ -93,6 +92,6 @@ model Shares {
     tweetId   String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
-    shared    Boolean
     updatedAt DateTime @default(now()) @updatedAt
+    @@unique([userId, tweetId])
 }

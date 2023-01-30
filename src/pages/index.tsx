@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 const Home: NextPage = () => {
 
-  const postsQuery = api.tweetRouter.list.useInfiniteQuery(
+  const tweetQuery = api.tweetRouter.list.useInfiniteQuery(
     {
       limit: 5,
     },
@@ -22,8 +22,8 @@ const Home: NextPage = () => {
   );
 
   useEffect(() => {
-    postsQuery.refetch().catch((e) => console.log(e));
-  },[postsQuery.data?.pages.length]);
+    tweetQuery.refetch().catch((e) => console.log(e));
+  },[tweetQuery.data?.pages.length]);
 
   return (
     <>
@@ -40,7 +40,7 @@ const Home: NextPage = () => {
               <div className="flex flex-row w-full h-4/6">
                 <div className="flex flex-row w-full overflow-scroll h-auto ">
                   <ul className="flex flex-col w-full h-auto">
-                    {postsQuery.data?.pages.map((page, index) => (
+                    {tweetQuery.data?.pages.map((page, index) => (
                       <li key={page.items[0]?.id || index}>
                         {page.items.map((item) => (
                           // eslint-disable-next-line react/jsx-key

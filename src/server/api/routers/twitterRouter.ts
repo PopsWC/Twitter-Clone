@@ -2,11 +2,10 @@
  *
  * This is an example router, you can delete this file and then update `../pages/api/trpc/[trpc].tsx`
  */
-import { createTRPCRouter, publicProcedure } from '../trpc';
+import { createTRPCRouter, publicProcedure, protectedProcedure, } from '../trpc'
 import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
-import { date, z } from 'zod';
-import { prisma } from '../../db';
+import { z } from 'zod';
 
 /**
  * Default selector for Post.
@@ -47,7 +46,7 @@ export const tweetRouter = createTRPCRouter({
         cursor: z.string().nullish(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       /**
        * For pagination docs you can have a look here
        * @see https://trpc.io/docs/useInfiniteQuery
@@ -56,6 +55,7 @@ export const tweetRouter = createTRPCRouter({
 
       const limit = input.limit ?? 50;
       const { cursor } = input;
+      const { prisma } = ctx
 
       const items = await prisma.tweets.findMany({
         select: defaultPostSelect,
@@ -93,7 +93,7 @@ export const tweetRouter = createTRPCRouter({
         cursor: z.string().nullish(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       /**
        * For pagination docs you can have a look here
        * @see https://trpc.io/docs/useInfiniteQuery
@@ -102,6 +102,7 @@ export const tweetRouter = createTRPCRouter({
 
       const limit = input.limit ?? 50;
       const { cursor } = input;
+      const { prisma } = ctx
       const items = await prisma.tweets.findMany({
         select: defaultPostSelect,
         // get an extra item at the end which we'll use as next cursor
@@ -134,8 +135,9 @@ export const tweetRouter = createTRPCRouter({
         id: z.string(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { id } = input;
+      const { prisma } = ctx
       const post = await prisma.tweets.findUnique({
         where: { id },
         select: defaultPostSelect,
@@ -157,8 +159,9 @@ export const tweetRouter = createTRPCRouter({
       }),
     )
     .mutation
-    (async ({ input }) => {
+    (async ({ ctx, input }) => {
       const { userId, tweetId } = input;
+      const { prisma } = ctx
       try {
         const checkLike = await prisma.likes.findMany({
           where: { userId, tweetId },
@@ -201,8 +204,9 @@ export const tweetRouter = createTRPCRouter({
         tweetId: z.string(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { userId, tweetId } = input;
+      const { prisma } = ctx
       try {
         const checkLike = await prisma.likes.findMany({
           where: { userId, tweetId },
@@ -230,8 +234,9 @@ export const tweetRouter = createTRPCRouter({
         tweetId: z.string(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { tweetId } = input;
+      const { prisma } = ctx
       try {
         const likes = await prisma.likes.findMany({
           where: { tweetId, liked: true }
@@ -251,8 +256,9 @@ export const tweetRouter = createTRPCRouter({
       }),
     )
     .mutation
-    (async ({ input }) => {
+    (async ({ ctx, input }) => {
       const { userId, tweetId } = input;
+      const { prisma } = ctx
       try {
         const checkShare = await prisma.shares.findMany({
           where: { userId, tweetId },
@@ -295,8 +301,9 @@ export const tweetRouter = createTRPCRouter({
         tweetId: z.string(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { userId, tweetId } = input;
+      const { prisma } = ctx
       try {
         const checkShare = await prisma.shares.findMany({
           where: { userId, tweetId },
@@ -324,8 +331,9 @@ export const tweetRouter = createTRPCRouter({
         tweetId: z.string(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { tweetId } = input;
+      const { prisma } = ctx
       try {
         const shares = await prisma.shares.findMany({
           where: { tweetId, shared: true }
@@ -346,7 +354,8 @@ export const tweetRouter = createTRPCRouter({
 
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
       const post = await prisma.tweets.create({
         data: input,
         select: defaultPostSelect,

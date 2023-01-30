@@ -48,7 +48,7 @@ const UserProfile = () => {
     )
 
     if (user === undefined) {
-
+        
     }
     else if (user) {
         const userData: UserData = {
@@ -69,7 +69,7 @@ const UserProfile = () => {
                             <ul className="flex flex-col w-full h-auto">
                                 {postsQuery.data?.pages.map((page, index) => (
                                     <li key={page.items[0]?.id || index}>
-                                        {page.items.map((item) => (
+                                        {page.items.map((item: { tweet: string; userName: string; userId: string; id: string; createdAt: { toDateString: () => string; }; }) => (
                                             // eslint-disable-next-line react/jsx-key
                                             <Tweets tweet={item.tweet} username={item.userName} userId={item.userId} tweetId={item.id} createdAt={item.createdAt.toDateString()} />
                                         ))}
