@@ -19,7 +19,7 @@ export const CreateTweet = () => {
     const utils = api.useContext();
     const addPost = api.tweetRouter.createTweet.useMutation({
         onSuccess() {
-            utils.tweetRouter.invalidate()
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
         },
     });
 

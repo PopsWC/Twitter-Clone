@@ -25,22 +25,22 @@ const Tweets = (tweetData: TweetData) => {
     const utils = api.useContext();
     const likeMutation = api.tweetRouter.like.useMutation({
         onSuccess: () => {
-            utils.tweetRouter.invalidate()
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
         }
     }).mutateAsync;
     const unlikeMutation = api.tweetRouter.unlike.useMutation({
         onSuccess: () => {
-            utils.tweetRouter.invalidate()
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
         }
     }).mutateAsync;
     const shareMutation = api.tweetRouter.share.useMutation({
         onSuccess: () => {
-            utils.tweetRouter.invalidate()
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
         }
     }).mutateAsync;
     const unshareMutation = api.tweetRouter.unshare.useMutation({
         onSuccess: () => {
-            utils.tweetRouter.invalidate()
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
         }
     }).mutateAsync;
     const likeData = api.tweetRouter.getTweetById.useQuery({ tweetId: tweetData.tweetId }).data?.likes.length
