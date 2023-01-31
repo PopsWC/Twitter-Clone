@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { createTRPCRouter, publicProcedure, protectedProcedure, } from '../trpc'
 import { Prisma } from '@prisma/client';
+import { share } from '@trpc/server/observable';
 
 
 const defaultTweetSelect = Prisma.validator<Prisma.TweetsSelect>()({
@@ -93,7 +94,8 @@ export const tweetRouter = createTRPCRouter({
                 id: input.tweetId
             },
             include: {
-                likes: true
+                likes: true,
+                shares: true
             }
         })
         return tweet
@@ -134,15 +136,15 @@ export const tweetRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             const { prisma } = ctx
             const userId = ctx.session.user.id
-            const dislikeData = {
+            const unlikeData = {
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id
             }
             return await prisma.likes.delete({
                 where: {
                     userId_tweetId: {
-                        userId: dislikeData.userId,
-                        tweetId: dislikeData.tweetId
+                        userId: unlikeData.userId,
+                        tweetId: unlikeData.tweetId
                     }
                 }
             })
@@ -155,7 +157,7 @@ export const tweetRouter = createTRPCRouter({
         )
         .mutation(async ({ ctx, input }) => {
             const { prisma } = ctx
-            const likeData = {
+            const shareData = {
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id
             }
@@ -163,12 +165,12 @@ export const tweetRouter = createTRPCRouter({
                 data: {
                     user: {
                         connect: {
-                            id: likeData.userId
+                            id: shareData.userId
                         }
                     },
                     tweet: {
                         connect: {
-                            id: likeData.tweetId
+                            id: shareData.tweetId
                         }
                     }
                 }
@@ -183,15 +185,15 @@ export const tweetRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             const { prisma } = ctx
             const userId = ctx.session.user.id
-            const dislikeData = {
+            const unshareData = {
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id
             }
             return await prisma.shares.delete({
                 where: {
                     userId_tweetId: {
-                        userId: dislikeData.userId,
-                        tweetId: dislikeData.tweetId
+                        userId: unshareData.userId,
+                        tweetId: unshareData.tweetId
                     }
                 }
             })

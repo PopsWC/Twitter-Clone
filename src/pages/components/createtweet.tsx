@@ -16,9 +16,10 @@ type Inputs = {
 
 
 export const CreateTweet = () => {
+    const utils = api.useContext();
     const addPost = api.tweetRouter.createTweet.useMutation({
         onSuccess() {
-            console.log("Success")
+            utils.tweetRouter.invalidate()
         },
     });
 
