@@ -57,7 +57,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex-col relative w-3/12 rounded-3xl p-5">
+        <div className="flex-col w-3/12 rounded-3xl p-5">
           <div className="flex flex-row h-1/4">
             <AuthBlock />
           </div>

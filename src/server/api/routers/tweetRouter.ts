@@ -17,7 +17,8 @@ export const tweetRouter = createTRPCRouter({
     createTweet: protectedProcedure
         .input(
             z.object({
-                tweet: z.string()
+                tweet: z.string(),
+                parentId: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {
@@ -29,6 +30,7 @@ export const tweetRouter = createTRPCRouter({
             }
             await prisma.tweets.create({
                 data: {
+                    parentId : input.parentId ? input.parentId : null,
                     tweet: tweetData.tweet,
                     userId: tweetData.userId,
                     userName: tweetData.userName
@@ -81,17 +83,17 @@ export const tweetRouter = createTRPCRouter({
             nextCursor,
           };
         }),
-    getTweetById: publicProcedure
+    getTweet: publicProcedure
     .input(
         z.object({
-            tweetId: z.string()
+            tweetId: z.string(),
         })
     )
     .query(async ({ ctx, input }) => {
         const { prisma } = ctx
         const tweet = await prisma.tweets.findUnique({
             where: {
-                id: input.tweetId
+                id: input.tweetId,
             },
             include: {
                 likes: true,
@@ -149,6 +151,28 @@ export const tweetRouter = createTRPCRouter({
                 }
             })
         }),
+        checkLike: protectedProcedure
+        .input(
+            z.object({
+                tweetId: z.string()
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            const { prisma } = ctx
+            const likeData = {
+                tweetId: input.tweetId,
+                userId: ctx.session.user.id
+            }
+            const like = await prisma.likes.findUnique({
+                where: {
+                    userId_tweetId: {
+                        userId: likeData.userId,
+                        tweetId: likeData.tweetId
+                    }
+                }
+            })
+            return like
+        }),
         share: protectedProcedure
         .input(
             z.object({
@@ -197,5 +221,27 @@ export const tweetRouter = createTRPCRouter({
                     }
                 }
             })
-        }),   
+        }),
+        checkShare: protectedProcedure
+        .input(
+            z.object({
+                tweetId: z.string()
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            const { prisma } = ctx
+            const shareData = {
+                tweetId: input.tweetId,
+                userId: ctx.session.user.id
+            }
+            const like = await prisma.likes.findUnique({
+                where: {
+                    userId_tweetId: {
+                        userId: shareData.userId,
+                        tweetId: shareData.tweetId
+                    }
+                }
+            })
+            return like
+        }),
 })
