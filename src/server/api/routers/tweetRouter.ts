@@ -234,7 +234,7 @@ export const tweetRouter = createTRPCRouter({
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id
             }
-            const like = await prisma.likes.findUnique({
+            const like = await prisma.shares.findUnique({
                 where: {
                     userId_tweetId: {
                         userId: shareData.userId,
