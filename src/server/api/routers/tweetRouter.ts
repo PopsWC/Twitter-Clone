@@ -42,6 +42,7 @@ export const tweetRouter = createTRPCRouter({
           z.object({
             limit: z.number().min(1).max(100).nullish(),
             cursor: z.string().nullish(),
+            tweedId: z.string().optional()
           }),
         )
         .query(async ({ ctx, input }) => {
@@ -59,7 +60,9 @@ export const tweetRouter = createTRPCRouter({
             select: defaultTweetSelect,
             // get an extra item at the end which we'll use as next cursor
             take: limit + 1,
-            where: {},
+            where: {
+                parentId: input.tweedId ? input.tweedId : null
+            },
             cursor: cursor
               ? {
                 id: cursor,

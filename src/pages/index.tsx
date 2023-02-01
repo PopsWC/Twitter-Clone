@@ -52,7 +52,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="flex flex-row w-full h-1/5 mt-10">
-                <CreateTweet />
+                <CreateTweet parentId={null}/>
               </div>
             </div>
           </div>

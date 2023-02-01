@@ -3,13 +3,6 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { useSession } from "next-auth/react"
 import { api } from "../../utils/api"
 
-type TweetData = {
-    tweet: string
-    userName: string
-    userId: string
-    createdAt: string
-}
-
 type Inputs = {
     tweet: string;
 };
@@ -25,10 +18,9 @@ export const CreateTweet = () => {
 
     const { register, handleSubmit, reset } = useForm<Inputs>();
     const onSubmit: SubmitHandler<Inputs> = async data => {
-                await addPost.mutateAsync(data).catch((err) => console.log(err))
+                await addPost.mutateAsync({tweet : data.tweet}).catch((err) => console.log(err))
                 reset({ tweet: "" })
-            }
-
+    };
 
     return (
         // We pass the event to the handleSubmit() function on submit.

@@ -15,6 +15,7 @@ import { api } from "../../utils/api"
 import TweetModal from "./tweetModal";
 import CreateTweet from "./createtweet";
 import { contextProps } from "@trpc/react-query/shared";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type TweetData = {
     userId: string
@@ -23,6 +24,10 @@ type TweetData = {
     tweet: string
     createdAt: string
 }
+
+type Inputs = {
+    tweet: string;
+};
 
 const Tweets = (tweetData: TweetData) => {
     const utils = api.useContext();
@@ -53,10 +58,35 @@ const Tweets = (tweetData: TweetData) => {
 
     const [showModal, setShowModal] = useState(false);
 
+    const tweetQuery = api.tweetRouter.list.useInfiniteQuery(
+        {
+            limit: 5,
+            tweedId: tweetData.tweetId,
+        },
+        {
+            getPreviousPageParam(lastPage) {
+                return lastPage.nextCursor;
+            },
+        },
+    );
+
+    const addPost = api.tweetRouter.createTweet.useMutation({
+        onSuccess() {
+            utils.tweetRouter.invalidate().catch((e) => console.log(e))
+        },
+    });
+
+    const { register, handleSubmit, reset } = useForm<Inputs>();
+    const onSubmit: SubmitHandler<Inputs> = async data => {
+                await addPost.mutateAsync({tweet : data.tweet, parentId: tweetData.tweetId}).catch((err) => console.log(err))
+                reset({ tweet: "" })
+    };
+
+
 
     return (
         <a href="#" className="block max-w-sm p-6 min-w-full bg-white border-b border-gray-200 rounded-md shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 className="mb-2 text-md font-bold tracking-tight text-white">@{tweetData.username}</h5>
+            <Link href={'/profile/'} className="mb-2 text-md font-bold tracking-tight text-white hover:underline underline-offset-4">@{tweetData.username}</Link>
             <p className="font-normal text-white text-sm">{tweetData.tweet}</p>
             <div className="flex flex-row justify-end gap-3 pt-2">
                 <button onClick={() => {
@@ -95,16 +125,65 @@ const Tweets = (tweetData: TweetData) => {
                 </button>
                 {showModal ? (
                     <div className="fixed flex inset-0 h-full w-full bg-gray-400 bg-opacity-70 items-center justify-center">
-                        <div className="flex flex-row w-3/4 h-3/4 border border-gray-700 rounded-lg shadow-md bg-gray-800 ">
-                            <div className="flex flex-row w-full p-4">
-                                <span className="text-white text-xl font-semibold">Reply To Tweet</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4" stroke="white" className="pl-2 w-7 h-7">
+                        <div className="inline-flex flex-col w-1/2 h-3/4 border border-gray-700 rounded-lg shadow-md bg-gray-800 ">
+                            <div className="flex flex-row min-w-full p-4 items-center">
+                                <span className="text-white text-lg font-semibold">Reply To Tweet</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" className="w-6 h-6 ml-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+                                </svg>
+                                <button className="flex flex-row ml-auto" onClick={() => setShowModal(false)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" className="w-7 h-7">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div className="flex flex-row pl-10 pt-5">
+                                <span className="mb-2 text-lg font-semibold tracking-tight text-white">@{tweetData.username}</span>
+                            </div>
+                            <div className="flex flex-row pl-14">
+                                <p className="font-normal text-white text-md">{tweetData.tweet}</p>
+                            </div>
+                            <div className="flex flex-row pl-14 pt-10 ">
+                                <span className="mb-2 text-lg font-semibold tracking-tight text-white">Replies</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" className="w-6 h-6 ml-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25" />
                                 </svg>
                             </div>
-                            <div className="flex flex-col w-full p-4 border-gray-700 rounded-lg shadow-md bg-gray-800">
-                                <h5 className="mb-2 text-md font-bold tracking-tight text-white">@{tweetData.username}</h5>
-                                <p className="font-normal text-white text-sm">{tweetData.tweet}</p>
+                            <div className="flex flex-row">
+                                <div className="flex flex-col w-1/4" />
+
+                                <div className="flex flex-row w-full h-full bg-white">
+                                    <div className="flex flex-row w-full overflow-scroll h-auto ">
+                                        <ul className="flex flex-col w-full h-auto">
+                                            {tweetQuery.data?.pages.map((page, index) => (
+                                                <li key={page.items[0]?.id || index}>
+                                                    {page.items.map((item) => (
+                                                        // eslint-disable-next-line react/jsx-key
+                                                        <Tweets tweet={item.tweet} username={item.userName} userId={item.userId} tweetId={item.id} createdAt={item.createdAt.toDateString()} />
+                                                    ))}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-row w-full h-1/6">
+                                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full h-full border border-gray-700 rounded-lg shadow-md bg-gray-800 flex-wrap">
+                                    <div className="flex flex-row w-4/5 h-full">
+                                        <textarea
+                                            {...register("tweet", { required: true })}
+                                            typeof="text"
+                                            id="tweet"
+                                            name="tweet"
+                                            required
+                                            placeholder="Whats Happening?"
+                                            className="bg-gray-800 h-full w-full text-white placeholder-gray-400 font-semibold p-4 border-transparent outline-none focus:border-transparent focus:ring-0"
+                                        />
+                                    </div>
+                                    <div className="flex flex-row w-1/5 h-full justify-center items-center">
+                                        <button type="submit" className="bg-sky-700 text-white rounded-lg py-3 px-10">Submit</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
