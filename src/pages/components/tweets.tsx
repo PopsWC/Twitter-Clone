@@ -12,8 +12,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
 import { api } from "../../utils/api"
-import TweetModal from "./tweetModal";
-import CreateTweet from "./createtweet";
 import { contextProps } from "@trpc/react-query/shared";
 import { SubmitHandler, useForm } from "react-hook-form";
 
