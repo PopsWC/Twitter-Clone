@@ -1,18 +1,8 @@
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
-import {
-    InfiniteData,
-    QueryClient,
-    useQueryClient,
-} from "@tanstack/react-query";
-
+import { useState } from "react";
 import Link from "next/link";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import updateLocal from "dayjs/plugin/updateLocale";
 import { api } from "../../utils/api"
-import { contextProps } from "@trpc/react-query/shared";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type TweetData = {
@@ -186,7 +176,6 @@ const Tweets = (tweetData: TweetData) => {
                         </div>
                     </div>
                 ) : null}
-
             </div>
         </a >
     )

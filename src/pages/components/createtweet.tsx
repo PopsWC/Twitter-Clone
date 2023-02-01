@@ -1,6 +1,5 @@
 import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { useSession } from "next-auth/react"
 import { api } from "../../utils/api"
 
 type Inputs = {

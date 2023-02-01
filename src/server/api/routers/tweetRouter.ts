@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { createTRPCRouter, publicProcedure, protectedProcedure, } from '../trpc'
 import { Prisma } from '@prisma/client';
-import { share } from '@trpc/server/observable';
 
 
 const defaultTweetSelect = Prisma.validator<Prisma.TweetsSelect>()({
