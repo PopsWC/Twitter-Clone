@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { useState } from "react";
 import Link from "next/link";
 import { api } from "../../utils/api"

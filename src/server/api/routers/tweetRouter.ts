@@ -139,7 +139,6 @@ export const tweetRouter = createTRPCRouter({
         )
         .mutation(async ({ ctx, input }) => {
             const { prisma } = ctx
-            const userId = ctx.session.user.id
             const unlikeData = {
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id
@@ -210,7 +209,6 @@ export const tweetRouter = createTRPCRouter({
         )
         .mutation(async ({ ctx, input }) => {
             const { prisma } = ctx
-            const userId = ctx.session.user.id
             const unshareData = {
                 tweetId: input.tweetId,
                 userId: ctx.session.user.id

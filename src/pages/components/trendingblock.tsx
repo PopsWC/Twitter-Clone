@@ -1,4 +1,3 @@
-import { NextPage } from "next";
 import  Tweets  from "./tweets";
 import { api } from "../../utils/api";
 

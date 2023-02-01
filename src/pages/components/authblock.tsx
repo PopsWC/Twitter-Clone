@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react"
 import Link from "next/link"
+import Image from "next/image"
 
 export function AuthBlock() {
     const { data: session, status } = useSession()
@@ -12,7 +13,7 @@ export function AuthBlock() {
                 <div className="flex flex-row min-w-full items-center ml-3 mt-3">
                     <div className="flex flex-col w-auto p-3">
                         <Link href={"/profile/" + userId}>
-                            <img className="w-12 h-12 rounded-full" src={session.user.image!} alt="Profile Picture" />
+                            <Image className="w-12 h-12 rounded-full" src={session.user.image!} alt="Profile Picture" />
                         </Link>
                     </div>
                     <div className="flex flex-col w-auto p-3">

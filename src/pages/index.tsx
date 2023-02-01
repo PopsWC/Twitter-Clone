@@ -21,10 +21,6 @@ const Home: NextPage = () => {
     },
   );
 
-  useEffect(() => {
-    tweetQuery.refetch().catch((e) => console.log(e));
-  },[tweetQuery.data?.pages.length]);
-
   return (
     <>
       <Head>
