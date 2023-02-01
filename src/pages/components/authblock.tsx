@@ -13,7 +13,7 @@ export function AuthBlock() {
                 <div className="flex flex-row min-w-full items-center ml-3 mt-3">
                     <div className="flex flex-col w-auto p-3">
                         <Link href={"/profile/" + userId}>
-                            <Image className="w-12 h-12 rounded-full" src={session.user.image!} alt="Profile Picture" />
+                            <img className="w-12 h-12 rounded-full" src={session.user.image!} alt="Profile Picture" />
                         </Link>
                     </div>
                     <div className="flex flex-col w-auto p-3">
