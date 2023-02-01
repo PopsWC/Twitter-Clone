@@ -154,6 +154,7 @@ const Tweets = (tweetData: TweetData) => {
                                 </div>
                             </div>
                             <div className="flex flex-row w-full h-1/6">
+                                  {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full h-full border border-gray-700 rounded-lg shadow-md bg-gray-800 flex-wrap">
                                     <div className="flex flex-row w-4/5 h-full">
                                         <textarea
