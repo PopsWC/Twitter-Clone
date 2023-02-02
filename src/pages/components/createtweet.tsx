@@ -24,7 +24,7 @@ export const CreateTweet = () => {
     return (
         // We pass the event to the handleSubmit() function on submit.
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full h-full border border-gray-700 rounded-lg shadow-md bg-gray-800 flex-wrap">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full h-full border-2 border-black rounded-lg shadow-md bg-white flex-wrap">
             <div className="flex flex-row w-4/5 h-full">
                 <textarea
                     {...register("tweet", { required: true })}
@@ -33,11 +33,11 @@ export const CreateTweet = () => {
                     name="tweet"
                     required
                     placeholder="Whats Happening?"
-                    className="bg-gray-800 h-full w-full text-white placeholder-gray-400 font-semibold p-4 border-transparent outline-none focus:border-transparent focus:ring-0" 
+                    className="ml-3 bg-white h-full w-full text-white placeholder-gray-400 font-semibold p-4 border-transparent outline-none focus:border-transparent focus:ring-0" 
                     />
             </div>
             <div className="flex flex-row w-1/5 h-full justify-center items-center">
-                <button type="submit" className="bg-sky-700 text-white rounded-lg py-3 px-10">Submit</button>
+                <button type="submit" className="bg-sky-400 text-white rounded-lg py-3 px-10">Submit</button>
             </div>
         </form>
 
