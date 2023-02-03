@@ -30,6 +30,7 @@ export const tweetRouter = createTRPCRouter({
             await prisma.tweets.create({
                 data: {
                     parentId : input.parentId ? input.parentId : null,
+                    isParent: input.parentId ? true : false,
                     tweet: tweetData.tweet,
                     userId: tweetData.userId,
                     userName: tweetData.userName
@@ -41,7 +42,7 @@ export const tweetRouter = createTRPCRouter({
           z.object({
             limit: z.number().min(1).max(100).nullish(),
             cursor: z.string().nullish(),
-            tweedId: z.string().optional()
+            tweedId: z.string().optional(),
           }),
         )
         .query(async ({ ctx, input }) => {
@@ -103,6 +104,44 @@ export const tweetRouter = createTRPCRouter({
             }
         })
         return tweet
+    }),
+    checkComment: protectedProcedure
+    .input(
+        z.object({
+            tweetId: z.string()
+        })
+    )
+    .query(async ({ ctx, input }) => {
+        const { prisma } = ctx
+        const commentData = {
+            tweetId: input.tweetId,
+            userId: ctx.session.user.id
+        }
+        const comment = await prisma.tweets.findFirst({
+            where: {
+                parentId: commentData.tweetId,
+                userId: commentData.userId
+            }
+        })
+        return comment
+    }),
+    getComments: publicProcedure
+    .input(
+        z.object({
+            tweetId: z.string()
+        })
+    )
+    .query(async ({ ctx, input }) => {
+        const { prisma } = ctx
+        const commentData = {
+            tweetId: input.tweetId,
+        }
+        const comments = await prisma.tweets.findMany({
+            where: {
+                parentId: commentData.tweetId,
+            },
+        })
+        return comments
     }),
     like: protectedProcedure
         .input(
